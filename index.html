@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Spotify Clone - OneDrive Player</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    body { background-color: #121212; color: #b3b3b3; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    .active-track { color: #1db954; font-weight: 600; }
+    input[type="range"] { accent-color: #1db954; }
+  </style>
+</head>
+<body class="h-screen flex flex-col justify-between overflow-hidden select-none">
+
+  <!-- Main Container -->
+  <div class="flex-1 flex overflow-hidden">
+    
+    <!-- Sidebar / Selector de Álbumes -->
+    <aside class="w-64 bg-black p-6 flex flex-col gap-6 hidden md:flex">
+      <div class="flex items-center gap-2 text-white font-bold text-xl">
+        <i class="fa-brands fa-spotify text-green-500 text-3xl"></i>
+        <span>OneDrive Music</span>
+      </div>
+
+      <div>
+        <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400 mb-3">Tus Álbumes</h3>
+        <ul id="album-list-menu" class="space-y-2 text-sm">
+          <!-- Carga dinámica de álbumes -->
+        </ul>
+      </div>
+    </aside>
+
+    <!-- Main View Area -->
+    <main class="flex-1 bg-gradient-to-b from-slate-900 to-[#121212] overflow-y-auto p-8">
+      
+      <!-- Album Banner -->
+      <div class="flex flex-col md:flex-row items-center md:items-end gap-6 mb-8">
+        <img id="album-cover" src="https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?w=500&q=80" alt="Cover" class="w-48 h-48 md:w-56 md:h-56 shadow-2xl rounded-md object-cover" />
+        <div class="flex flex-col gap-2 text-center md:text-left">
+          <span class="text-xs uppercase font-bold text-white tracking-widest">Álbum</span>
+          <h1 id="album-title" class="text-3xl md:text-6xl font-black text-white">Cargando Álbum...</h1>
+          <p id="album-artist" class="text-sm font-medium text-gray-300">Conectando a OneDrive API...</p>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="flex items-center gap-4 mb-6">
+        <button id="btn-play-all" class="w-14 h-14 bg-green-500 hover:scale-105 rounded-full flex items-center justify-center text-black text-2xl shadow-lg transition">
+          <i class="fa-solid fa-play ml-1"></i>
+        </button>
+      </div>
+
+      <!-- Tracklist Table -->
+      <div class="w-full">
+        <div class="grid grid-cols-12 text-xs font-semibold uppercase tracking-wider text-gray-400 border-b border-gray-800 pb-2 px-4">
+          <div class="col-span-1">#</div>
+          <div class="col-span-7">Título</div>
+          <div class="col-span-4 text-right"><i class="fa-regular fa-clock"></i></div>
+        </div>
+        <div id="track-container" class="mt-2 space-y-1">
+          <!-- Carga dinámica de pistas -->
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Player Bar -->
+  <footer class="h-24 bg-[#181818] border-t border-gray-800 px-4 flex items-center justify-between z-50">
+    
+    <!-- Track Info -->
+    <div class="flex items-center gap-4 w-1/4">
+      <img id="player-thumb" src="https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?w=100&q=80" class="w-14 h-14 rounded object-cover" />
+      <div class="overflow-hidden">
+        <p id="player-title" class="text-sm font-medium text-white truncate">Ninguna canción seleccionada</p>
+        <p id="player-artist" class="text-xs text-gray-400 truncate">OneDrive Player</p>
+      </div>
+    </div>
+
+    <!-- Player Controls -->
+    <div class="flex flex-col items-center gap-2 w-2/4 max-w-xl">
+      <div class="flex items-center gap-6">
+        <button id="btn-prev" class="text-gray-400 hover:text-white transition"><i class="fa-solid fa-backward-step text-lg"></i></button>
+        <button id="btn-play" class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-black hover:scale-105 transition">
+          <i class="fa-solid fa-play ml-0.5"></i>
+        </button>
+        <button id="btn-next" class="text-gray-400 hover:text-white transition"><i class="fa-solid fa-forward-step text-lg"></i></button>
+      </div>
+
+      <div class="w-full flex items-center gap-3 text-xs">
+        <span id="time-current" class="w-10 text-right">0:00</span>
+        <input type="range" id="progress-bar" value="0" min="0" max="100" class="w-full h-1 bg-gray-600 rounded-lg cursor-pointer" />
+        <span id="time-duration" class="w-10">0:00</span>
+      </div>
+    </div>
+
+    <!-- Volume -->
+    <div class="flex items-center justify-end gap-2 w-1/4">
+      <i class="fa-solid fa-volume-high text-gray-400"></i>
+      <input type="range" id="volume-bar" min="0" max="1" step="0.01" value="0.8" class="w-24 h-1 bg-gray-600 rounded-lg cursor-pointer" />
+    </div>
+
+  </footer>
+
+  <script src="albums.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
