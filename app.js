@@ -20,8 +20,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function renderSidebar() {
   const menu = document.getElementById("album-list-menu");
+  if (!menu) return;
   menu.innerHTML = "";
-  ALBUMS_CONFIG.forEach((album, idx) => {
+  ALBUMS_CONFIG.forEach((album) => {
     const li = document.createElement("li");
     li.className = "cursor-pointer hover:text-white transition py-1 truncate";
     li.innerText = album.title;
@@ -37,19 +38,22 @@ async function loadAlbum(album) {
   document.getElementById("album-cover").src = album.cover;
 
   document.getElementById("track-container").innerHTML = `
-    <div class="text-center py-8 text-gray-400">Consultando carpetas de Microsoft OneDrive API...</div>
+    <div class="text-center py-8 text-gray-400">Consultando archivos de OneDrive...</div>
   `;
 
   try {
     const encodedToken = encodeOneDriveUrl(album.oneDriveShareUrl);
     const apiUrl = `https://graph.microsoft.com/v1.0/shares/${encodedToken}/driveItem/children`;
+    
+    // Proxy CORS habilitado para evitar bloqueos
+    const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(apiUrl)}`;
 
-    const response = await fetch(apiUrl);
-    if (!response.ok) throw new Error("CORS or Unauthorized");
+    const response = await fetch(proxyUrl);
+    if (!response.ok) throw new Error("CORS o enlace privado/no compartido");
 
     const data = await response.json();
     const tracks = data.value
-      .filter(item => item.audio || item.name.match(/\.(mp3|wav|m4a|flac)$/i))
+      .filter(item => item.audio || (item.name && item.name.match(/\.(mp3|wav|m4a|flac)$/i)))
       .map(item => ({
         id: item.id,
         name: item.name.replace(/\.[^/.]+$/, ""),
@@ -57,11 +61,11 @@ async function loadAlbum(album) {
         downloadUrl: item["@microsoft.graph.downloadUrl"]
       }));
 
-    if (tracks.length === 0) throw new Error("No audio files found");
+    if (tracks.length === 0) throw new Error("No se encontraron archivos de audio");
     currentPlaylist = tracks;
   } catch (err) {
-    console.warn("Fallo en la llamada directa a Graph API (CORS/Políticas del enlace). Cargando pistas locales de respaldo.", err);
-    currentPlaylist = album.fallbackTracks;
+    console.warn("Error cargando desde OneDrive API, usando respaldo:", err);
+    currentPlaylist = album.fallbackTracks || [];
   }
 
   renderTracklist();
@@ -70,6 +74,11 @@ async function loadAlbum(album) {
 function renderTracklist() {
   const container = document.getElementById("track-container");
   container.innerHTML = "";
+
+  if (currentPlaylist.length === 0) {
+    container.innerHTML = `<div class="text-center py-8 text-red-400">No se pudieron obtener las canciones. Verificá que la carpeta de OneDrive esté configurada como pública ("Cualquier persona con el enlace").</div>`;
+    return;
+  }
 
   currentPlaylist.forEach((track, index) => {
     const row = document.createElement("div");
