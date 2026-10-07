@@ -1,24 +1,22 @@
 const ALBUMS_CONFIG = [
   {
-    id: "onedrive-demo",
-    title: "Carpeta Compartida OneDrive",
-    artist: "Varios Artistas",
+    id: "mans-best-friend",
+    title: "Man's Best Friend",
+    artist: "Artista",
     cover: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=500&q=80",
-    // Enlace público de prueba provisto
-    oneDriveShareUrl: "https://1drv.ms/f/c/8e4d86775c2e06df/IgCs5bXB7IQLSaFBl4S5XLLSATRNPLRMtvb9xRAovRYmTdE?e=lozpQb",
-    // Tracks de reserva en caso de restricción estricta de CORS en el navegador
+    oneDriveShareUrl: "",
     fallbackTracks: [
       {
         id: "1",
-        name: "Demo Track 01 - Sample Audio",
-        duration: "2:30",
-        downloadUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+        name: "ManChild",
+        duration: "3:33",
+        downloadUrl: "https://1drv.ms/u/c/8e4d86775c2e06df/IQADxLeUa_8xTYKvrbuCKQZ6ASfznPSfB6tif4BRSyLR938?e=JqspR2"
       },
       {
         id: "2",
-        name: "Demo Track 02 - Sample Audio",
-        duration: "4:05",
-        downloadUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3"
+        name: "Tears",
+        duration: "2:40",
+        downloadUrl: "https://1drv.ms/u/c/8e4d86775c2e06df/IQCSQMQbsM3BTalO0jVR0KjUAajB_SkYhymypOWnVg8qJ0U?e=Q1fd31"
       }
     ]
   }
